@@ -1,15 +1,23 @@
-# 🎬 YouTube Shorts Video Generator
+# 🎬 YouTube Shorts Video Generator - AI Powered
 
-A modern, client-side web application for creating vertical videos optimized for YouTube Shorts. Built with pure HTML, CSS, and JavaScript - no server required!
+A modern, client-side web application for creating vertical videos optimized for YouTube Shorts with **AI-powered image generation**. Built with pure HTML, CSS, and JavaScript - no server required!
 
 ![YouTube Shorts Generator](https://img.shields.io/badge/YouTube-Shorts-FF0050?style=for-the-badge&logo=youtube)
+![AI Powered](https://img.shields.io/badge/AI-Powered-7B2FFF?style=for-the-badge)
 ![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5)
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript)
 
 ## ✨ Features
 
-### 🎨 Background Options
+### 🤖 AI Generate Mode (NEW!)
+- **Text-to-Image AI**: Generate stunning backgrounds from text prompts
+- **8 Style Presets**: Cinematic, Anime, Realistic, Abstract, Neon, Minimal, Fantasy, None
+- **Quick Prompts**: Pre-made prompt suggestions for instant creativity
+- **API Integration**: Works with Replicate API (Stable Diffusion) or Hugging Face
+- **Vertical Output**: Optimized 9:16 aspect ratio for Shorts
+
+### 🎨 Background Options (Manual Mode)
 - **Solid Colors**: Choose any color with a color picker
 - **Gradients**: 10 beautiful pre-made gradients (Sunset, Ocean, Forest, Fire, Ice, Midnight, Aurora, Candy, Gold, Purple)
 - **Images**: Upload your own background images
@@ -56,25 +64,60 @@ php -S localhost:8000
 
 Then visit `http://localhost:8000` in your browser.
 
+## 🤖 AI Generation Guide
+
+### Option 1: Replicate API (Recommended)
+1. Get a free API key from [replicate.com](https://replicate.com)
+2. Click the API Key toggle in the AI Generate tab
+3. Paste your API key (it will be saved locally)
+4. Enter your prompt and click "Generate with AI"
+
+### Option 2: Hugging Face (Free, Limited)
+- No API key required
+- Limited to demo token (may have rate limits)
+- Works out of the box for testing
+
+## 📝 Example AI Prompts
+
+| Category | Prompt | Style |
+|----------|--------|-------|
+| 🌅 Nature | Sunset over ocean waves, golden hour | Cinematic |
+| 🌃 Urban | Cyberpunk city at night, neon lights, rain | Neon |
+| 🌲 Fantasy | Magical forest with glowing mushrooms and fireflies | Fantasy |
+| 🌌 Space | Space nebula with stars and galaxies | Cinematic |
+| 🏔️ Landscape | Mountain peak above clouds, sunrise | Realistic |
+| 🎨 Abstract | Abstract geometric shapes, vibrant colors | Abstract |
+
+## 🎯 Style Presets
+
+| Style | Description |
+|-------|-------------|
+| **Cinematic** | Film-like quality with dramatic lighting |
+| **Anime** | Japanese animation style, vibrant colors |
+| **Realistic** | Photorealistic, hyper-detailed images |
+| **Abstract** | Modern art, geometric shapes |
+| **Neon** | Cyberpunk aesthetic, glowing lights |
+| **Minimal** | Clean, simple, minimalist design |
+| **Fantasy** | Magical, ethereal, otherworldly |
+| **None** | No style modification |
+
 ## 📖 How to Use
 
-1. **Select Background Type**
-   - Choose between Solid Color, Gradient, or Image
-   - Customize the selected option
+### Manual Mode
+1. **Select Background Type**: Choose between Solid Color, Gradient, or Image
+2. **Customize Background**: Pick a color, select a gradient, or upload your own image
+3. **Add Text Overlay**: Enter your text, choose color, size, and position
+4. **Select Animation**: Choose from 5 animation effects
+5. **Add Audio (Optional)**: Upload background music
+6. **Generate Video**: Click "Generate Video" and download
 
-2. **Add Text Overlay**
-   - Enter your text in the textarea
-   - Choose text color, size, and position
-   - Select an animation effect
-
-3. **Add Audio (Optional)**
-   - Toggle the audio upload section
-   - Select an MP3 or WAV file
-
-4. **Generate Video**
-   - Click the "Generate Video" button
-   - Wait for the video to be created
-   - Download your video
+### AI Mode
+1. **Switch to AI Tab**: Click the "🤖 AI Generate" tab
+2. **Enter Prompt**: Describe the background you want
+3. **Select Style**: Choose a style preset
+4. **Generate**: Click "Generate with AI"
+5. **Customize**: Add text overlay and effects
+6. **Create Video**: Generate your Shorts!
 
 ## 🎯 Use Cases
 
@@ -82,7 +125,7 @@ Then visit `http://localhost:8000` in your browser.
 - Make quote/statement videos
 - Produce motivational content
 - Generate promotional material
-- Create before/after comparisons
+- Create AI-generated artistic backgrounds
 - Make text-based stories
 
 ## 💡 Tips for Better Videos
@@ -91,7 +134,8 @@ Then visit `http://localhost:8000` in your browser.
 2. **High Contrast**: Ensure text is readable against the background
 3. **Bold Text**: Use larger font sizes for mobile viewing
 4. **Add Music**: Background music increases engagement
-5. **Brand Colors**: Use consistent colors for brand recognition
+5. **Use AI for Unique Backgrounds**: Stand out from other creators
+6. **Be Specific with Prompts**: More detail = better AI results
 
 ## 🛠️ Technical Details
 
@@ -107,12 +151,14 @@ Then visit `http://localhost:8000` in your browser.
 - **JavaScript ES6+**: Pure JavaScript, no frameworks
 - **MediaRecorder API**: For video encoding
 - **Web Audio API**: For audio processing
+- **AI APIs**: Replicate & Hugging Face for image generation
 
 ### File Structure
 ```
 ├── index.html      # Main application
 ├── SPEC.md         # Technical specification
 ├── README.md       # Documentation
+├── DEPLOY.md       # Deployment guide
 └── requirements.txt # (Optional) Python dependencies
 ```
 
@@ -133,9 +179,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🙏 Acknowledgments
 
 - YouTube Shorts for inspiring this project
+- Stable Diffusion by Stability AI
+- Replicate for easy AI model hosting
+- Hugging Face for free inference API
 - Google Fonts for Poppins and Inter fonts
 - All contributors and users of this tool
 
 ---
 
-Made with ❤️ for content creators everywhere
+Made with ❤️ for content creators everywhere | ✨ AI Powered
