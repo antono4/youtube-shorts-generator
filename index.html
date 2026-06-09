@@ -1221,10 +1221,10 @@
                     <div class="file-upload-text">Upload background music (MP3, WAV)</div>
                 </div>
                 <div class="file-preview hidden" id="audioPreviewContainer">
-                    <div style="background: var(--secondary); padding: 1rem; border-radius: 8px; text-align: center;">
-                        <span>🎵 </span>
-                        <span id="audioFileName">audio.mp3</span>
-                        <button class="remove-btn" id="removeAudio" style="position: static; margin-left: 0.5rem;">✕</button>
+                    <div style="background: var(--secondary); padding: 1rem; border-radius: 8px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                        <span>🎵</span>
+                        <span id="audioFileName" style="flex: 1; overflow: hidden; text-overflow: ellipsis;">No audio</span>
+                        <button class="remove-btn" id="removeAudio">✕</button>
                     </div>
                 </div>
             </div>
