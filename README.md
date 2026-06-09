@@ -64,20 +64,19 @@ php -S localhost:8000
 
 Then visit `http://localhost:8000` in your browser.
 
-## 🤖 AI Generation Guide
+## 🤖 AI Generation (No API Key Required!)
 
-### Option 1: Replicate API (Recommended)
-1. Get a free API key from [replicate.com](https://replicate.com)
-2. Click the API Key toggle in the AI Generate tab
-3. Paste your API key (it will be saved locally)
-4. Enter your prompt and click "Generate with AI"
+This app uses **Pollinations.ai** for free, unlimited AI image generation - no API key needed!
 
-### Option 2: Hugging Face (Free, Limited)
-- No API key required
-- Limited to demo token (may have rate limits)
-- Works out of the box for testing
+### How to Use AI
+1. Click the **"🤖 AI Generate"** tab
+2. Enter a prompt describing the background you want
+3. Select a style preset (Cinematic, Anime, Realistic, etc.)
+4. Click **"Generate with AI"**
+5. Wait 10-20 seconds for the image to be created
+6. Add text overlay and generate your video!
 
-## 📝 Example AI Prompts
+### Example Prompts
 
 | Category | Prompt | Style |
 |----------|--------|-------|

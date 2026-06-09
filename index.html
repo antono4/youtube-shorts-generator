@@ -1002,16 +1002,9 @@
                     </button>
 
                     <div class="api-key-section">
-                        <div class="api-key-toggle" id="apiKeyToggle">
-                            <span>🔑</span>
-                            <span>API Key (Optional)</span>
-                        </div>
-                        <div id="apiKeyContainer" class="hidden">
-                            <input type="password" id="apiKeyInput" class="api-key-input" placeholder="Enter Replicate API Key...">
-                            <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 0.4rem;">
-                                Get free API key at <a href="https://replicate.com" target="_blank" style="color: #00D4FF;">replicate.com</a>
-                            </p>
-                        </div>
+                        <p style="font-size: 0.7rem; color: var(--text-muted); text-align: center; margin-top: 0.5rem;">
+                            💡 Pollinations AI is free and works without API key!
+                        </p>
                     </div>
                 </div>
             </div>
@@ -2011,15 +2004,19 @@
             generateBtn.innerHTML = '<span class="spinner"></span> Generating...';
             promptInput.disabled = true;
 
+            // Show loading toast
+            showToast('Generating image... (may take 10-20 seconds)', 'info');
+
             try {
                 let imageUrl;
 
+                // Priority: Replicate API > Pollinations (free, no key needed)
                 if (apiKey) {
                     // Use Replicate API with Stable Diffusion
                     imageUrl = await generateWithReplicate(prompt, style, apiKey);
                 } else {
-                    // Fallback: Use free Hugging Face Inference API
-                    imageUrl = await generateWithHuggingFace(prompt, style);
+                    // Use Pollinations AI (free, no API key required!)
+                    imageUrl = await generateWithPollinations(prompt, style);
                 }
 
                 // Load and display the image
@@ -2036,13 +2033,13 @@
                     showToast('AI image generated successfully!', 'success');
                 };
                 img.onerror = () => {
-                    showToast('Failed to load generated image', 'error');
+                    showToast('Failed to load generated image. Please try again.', 'error');
                 };
                 img.src = imageUrl;
 
             } catch (error) {
                 console.error('AI Generation Error:', error);
-                showToast('Error generating image: ' + error.message, 'error');
+                showToast('Error: ' + error.message, 'error');
             } finally {
                 generateBtn.disabled = false;
                 generateBtn.innerHTML = '<span>✨</span><span>Generate with AI</span>';
@@ -2113,7 +2110,33 @@
             }
         }
 
-        // Hugging Face Inference API (free tier)
+        // Pollinations AI (Free, no API key required!)
+        async function generateWithPollinations(prompt, style) {
+            const styleModifiers = {
+                cinematic: 'cinematic lighting dramatic 8k',
+                anime: 'anime style Studio Ghibli vibrant',
+                realistic: 'photorealistic realistic detailed',
+                abstract: 'abstract geometric modern art',
+                neon: 'neon lights cyberpunk glowing',
+                minimalist: 'minimalist clean simple white background',
+                fantasy: 'fantasy magical ethereal mystical',
+                none: ''
+            };
+
+            const styleModifier = styleModifiers[style] || '';
+            const fullPrompt = `${prompt} ${styleModifier}`.trim();
+            
+            // Encode prompt for URL
+            const encodedPrompt = encodeURIComponent(fullPrompt);
+            
+            // Pollinations.ai provides free image generation
+            // Using vertical aspect ratio (9:16 = height/width ratio of ~1.77)
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodedPrompt}?width=768&height=1344&nologo=true`;
+            
+            return imageUrl;
+        }
+
+        // Hugging Face Inference API (fallback - may have rate limits)
         async function generateWithHuggingFace(prompt, style) {
             const styleModifiers = {
                 cinematic: 'cinematic lighting, dramatic, 8k, professional',
@@ -2145,7 +2168,7 @@
             });
 
             if (!response.ok) {
-                throw new Error('Hugging Face API rate limit reached. Please add your own API key.');
+                throw new Error('Hugging Face API rate limit reached');
             }
 
             const blob = await response.blob();
