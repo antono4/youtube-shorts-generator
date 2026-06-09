@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Shorts Video Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FF0050;
+            --secondary: #1A1A2E;
+            --accent: #FFD700;
+            --background: #0F0F1A;
+            --surface: #16213E;
+            --text: #FFFFFF;
+            --text-muted: #AAAAAA;
+            --gradient-1: linear-gradient(135deg, #FF0050, #FF3366);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(180deg, var(--secondary) 0%, transparent 100%);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        /* Main Container */
+        .container {
+            display: grid;
+            grid-template-columns: 350px 1fr 350px;
+            gap: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: calc(100vh - 150px);
+        }
+
+        /* Panel Styles */
+        .panel {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+        }
+
+        .panel-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .panel-title .icon {
+            width: 32px;
+            height: 32px;
+            background: var(--gradient-1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Form Controls */
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: var(--secondary);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Color Picker */
+        .color-picker-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        input[type="color"] {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+
+        input[type="color"]::-webkit-color-swatch {
+            border: 3px solid var(--secondary);
+            border-radius: 10px;
+        }
+
+        .color-value {
+            font-family: monospace;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Radio Cards */
+        .radio-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+        }
+
+        .radio-card {
+            position: relative;
+        }
+
+        .radio-card input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .radio-card label {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem;
+            background: var(--secondary);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0;
+            font-size: 0.75rem;
+        }
+
+        .radio-card input:checked + label {
+            background: var(--primary);
+            color: white;
+        }
+
+        .radio-card label:hover {
+            background: #2A2A4E;
+        }
+
+        /* Gradient Grid */
+        .gradient-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .gradient-swatch {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .gradient-swatch:hover {
+            transform: scale(1.1);
+        }
+
+        .gradient-swatch.active {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
+        /* Slider */
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: var(--secondary);
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .slider-value {
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+
+        /* File Upload */
+        .file-upload {
+            position: relative;
+            border: 2px dashed var(--secondary);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover {
+            border-color: var(--primary);
+            background: rgba(255, 0, 80, 0.1);
+        }
+
+        .file-upload input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-upload-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .file-upload-text {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .file-preview {
+            margin-top: 1rem;
+            position: relative;
+        }
+
+        .file-preview img {
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        .file-preview .remove-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Preview Panel */
+        .preview-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .video-preview {
+            width: 100%;
+            max-width: 300px;
+            aspect-ratio: 9/16;
+            background: var(--secondary);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .video-preview canvas {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-label {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .live-indicator {
+            width: 8px;
+            height: 8px;
+            background: #00FF00;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Info Cards */
+        .info-card {
+            background: var(--secondary);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-card h4 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-row span:last-child {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* Tips Card */
+        .tips-card {
+            background: linear-gradient(135deg, var(--secondary), #1E2A4A);
+            border-left: 4px solid var(--primary);
+            border-radius: 12px;
+            padding: 1rem;
+        }
+
+        .tips-card h4 {
+            color: var(--accent);
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .tips-card ul {
+            list-style: none;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .tips-card li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.25rem;
+            position: relative;
+        }
+
+        .tips-card li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 20px rgba(255, 0, 80, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 0, 80, 0.6);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: var(--text);
+        }
+
+        .btn-secondary:hover {
+            background: #2A2A4E;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        /* Progress */
+        .progress-container {
+            display: none;
+            margin-top: 1.5rem;
+        }
+
+        .progress-container.active {
+            display: block;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--secondary);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-1);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+
+        /* Download Section */
+        .download-section {
+            display: none;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--secondary);
+        }
+
+        .download-section.active {
+            display: block;
+        }
+
+        .download-card {
+            background: linear-gradient(135deg, #00C853, #00E676);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .download-card h4 {
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .download-card p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Divider */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+            margin: 1.5rem 0;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .panel {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .panel:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .panel:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        /* Hidden file inputs */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Loading spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--secondary);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+            }
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--surface);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid #00C853;
+        }
+
+        .toast.error {
+            border-left: 4px solid #FF0050;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 class="logo">🎬 YouTube Shorts Generator</h1>
+        <p class="subtitle">Create stunning vertical videos for YouTube Shorts in minutes</p>
+    </header>
+
+    <div class="container">
+        <!-- Left Panel: Background Settings -->
+        <div class="panel">
+            <h2 class="panel-title">
+                <span class="icon">🎨</span>
+                Background
+            </h2>
+
+            <div class="form-group">
+                <label>Type</label>
+                <div class="radio-cards">
+                    <div class="radio-card">
+                        <input type="radio" name="bgType" id="bgSolid" value="solid" checked>
+                        <label for="bgSolid">🎨 Solid</label>
+                    </div>
+                    <div class="radio-card">
+                        <input type="radio" name="bgType" id="bgGradient" value="gradient">
+                        <label for="bgGradient">🌈 Gradient</label>
+                    </div>
+                    <div class="radio-card">
+                        <input type="radio" name="bgType" id="bgImage" value="image">
+                        <label for="bgImage">🖼️ Image</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Solid Color Picker -->
+            <div id="solidColorPicker" class="form-group">
+                <label>Color</label>
+                <div class="color-picker-wrapper">
+                    <input type="color" id="bgColor" value="#FF0050">
+                    <span class="color-value" id="colorValue">#FF0050</span>
+                </div>
+            </div>
+
+            <!-- Gradient Picker -->
+            <div id="gradientPicker" class="form-group hidden">
+                <label>Choose Gradient</label>
+                <div class="gradient-grid" id="gradientGrid"></div>
+            </div>
+
+            <!-- Image Upload -->
+            <div id="imageUpload" class="form-group hidden">
+                <div class="file-upload" id="imageUploadArea">
+                    <input type="file" id="bgImageInput" accept="image/*">
+                    <div class="file-upload-icon">📤</div>
+                    <div class="file-upload-text">Click or drag to upload image</div>
+                </div>
+                <div class="file-preview hidden" id="imagePreviewContainer">
+                    <img id="imagePreview" alt="Background preview">
+                    <button class="remove-btn" id="removeImage">✕</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Panel: Preview -->
+        <div class="panel preview-panel">
+            <h2 class="panel-title">
+                <span class="icon">📺</span>
+                Preview
+            </h2>
+
+            <div class="video-preview">
+                <canvas id="previewCanvas" width="540" height="960"></canvas>
+                <div class="preview-label">
+                    <span class="live-indicator"></span>
+                    LIVE
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-primary btn-full" id="generateBtn">
+                    🎬 Generate Video
+                </button>
+            </div>
+
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <p class="progress-text" id="progressText">Preparing...</p>
+            </div>
+
+            <div class="download-section" id="downloadSection">
+                <div class="download-card">
+                    <h4>✅ Video Ready!</h4>
+                    <p>Your video is ready to download</p>
+                    <button class="btn btn-secondary" id="downloadBtn" style="background: white; color: #00C853;">
+                        📥 Download Video
+                    </button>
+                    <button class="btn btn-secondary" id="newVideoBtn" style="margin-top: 0.5rem;">
+                        🔄 Create New
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel: Text & Audio -->
+        <div class="panel">
+            <h2 class="panel-title">
+                <span class="icon">✏️</span>
+                Text Overlay
+            </h2>
+
+            <div class="form-group">
+                <label for="overlayText">Text Content</label>
+                <textarea id="overlayText" placeholder="Enter your text here...">Your Text Here!</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Text Color</label>
+                <div class="color-picker-wrapper">
+                    <input type="color" id="textColor" value="#FFFFFF">
+                    <span class="color-value" id="textColorValue">#FFFFFF</span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Font Size</label>
+                <input type="range" id="fontSize" min="24" max="120" value="48">
+                <div class="slider-value" id="fontSizeValue">48px</div>
+            </div>
+
+            <div class="form-group">
+                <label for="textPosition">Position</label>
+                <select id="textPosition">
+                    <option value="top">Top</option>
+                    <option value="center" selected>Center</option>
+                    <option value="bottom">Bottom</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="textAnimation">Animation</label>
+                <select id="textAnimation">
+                    <option value="none">None</option>
+                    <option value="fade" selected>Fade In</option>
+                    <option value="typewriter">Typewriter</option>
+                    <option value="bounce">Bounce</option>
+                    <option value="slideUp">Slide Up</option>
+                </select>
+            </div>
+
+            <div class="divider"></div>
+
+            <h2 class="panel-title">
+                <span class="icon">🎵</span>
+                Audio
+            </h2>
+
+            <div class="form-group">
+                <div class="file-upload" id="audioUploadArea">
+                    <input type="file" id="audioInput" accept="audio/*">
+                    <div class="file-upload-icon">🎶</div>
+                    <div class="file-upload-text">Upload background music (MP3, WAV)</div>
+                </div>
+                <div class="file-preview hidden" id="audioPreviewContainer">
+                    <div style="background: var(--secondary); padding: 1rem; border-radius: 8px; text-align: center;">
+                        <span>🎵 </span>
+                        <span id="audioFileName">audio.mp3</span>
+                        <button class="remove-btn" id="removeAudio" style="position: static; margin-left: 0.5rem;">✕</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <h2 class="panel-title">
+                <span class="icon">⚙️</span>
+                Settings
+            </h2>
+
+            <div class="form-group">
+                <label for="videoDuration">Duration</label>
+                <select id="videoDuration">
+                    <option value="15" selected>15 seconds</option>
+                    <option value="30">30 seconds</option>
+                    <option value="60">60 seconds</option>
+                </select>
+            </div>
+
+            <div class="info-card">
+                <h4>📋 Video Info</h4>
+                <div class="info-row">
+                    <span>Resolution</span>
+                    <span>1080 × 1920</span>
+                </div>
+                <div class="info-row">
+                    <span>Aspect Ratio</span>
+                    <span>9:16 (Vertical)</span>
+                </div>
+                <div class="info-row">
+                    <span>Format</span>
+                    <span>MP4 (WebM)</span>
+                </div>
+                <div class="info-row">
+                    <span>Frame Rate</span>
+                    <span>30 FPS</span>
+                </div>
+            </div>
+
+            <div class="tips-card">
+                <h4>💡 Pro Tips</h4>
+                <ul>
+                    <li>Keep text short and impactful</li>
+                    <li>Use high contrast colors</li>
+                    <li>Vertical videos perform best with minimal text</li>
+                    <li>Add music to increase engagement</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Built with ❤️ for YouTube Creators | Optimized for YouTube Shorts</p>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span id="toastIcon">✅</span>
+        <span id="toastMessage">Success!</span>
+    </div>
+
+    <!-- Hidden video element for rendering -->
+    <video id="renderVideo" style="display: none;"></video>
+
+    <script>
+        // Gradients data
+        const GRADIENTS = [
+            { name: 'Sunset', colors: ['#FF6B6B', '#4ECDC4'] },
+            { name: 'Ocean', colors: ['#667EEA', '#764BA2'] },
+            { name: 'Forest', colors: ['#11998E', '#38EF7D'] },
+            { name: 'Fire', colors: ['#F093FB', '#F5576C'] },
+            { name: 'Ice', colors: ['#00C9FF', '#92FE9D'] },
+            { name: 'Midnight', colors: ['#0F2027', '#2C5364'] },
+            { name: 'Aurora', colors: ['#00B4DB', '#0083B0'] },
+            { name: 'Candy', colors: ['#FFB6C1', '#E6E6FA'] },
+            { name: 'Gold', colors: ['#F7971E', '#FFD200'] },
+            { name: 'Purple', colors: ['#8E2DE2', '#4A00E0'] },
+        ];
+
+        // State
+        let state = {
+            bgType: 'solid',
+            bgColor: '#FF0050',
+            selectedGradient: 0,
+            bgImage: null,
+            text: 'Your Text Here!',
+            textColor: '#FFFFFF',
+            fontSize: 48,
+            textPosition: 'center',
+            textAnimation: 'fade',
+            audioFile: null,
+            duration: 15,
+            animationFrame: 0,
+            generatedBlob: null
+        };
+
+        // DOM Elements
+        const canvas = document.getElementById('previewCanvas');
+        const ctx = canvas.getContext('2d');
+        const generateBtn = document.getElementById('generateBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const downloadSection = document.getElementById('downloadSection');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const newVideoBtn = document.getElementById('newVideoBtn');
+        const toast = document.getElementById('toast');
+
+        // Initialize gradient grid
+        function initGradientGrid() {
+            const grid = document.getElementById('gradientGrid');
+            GRADIENTS.forEach((gradient, index) => {
+                const swatch = document.createElement('div');
+                swatch.className = 'gradient-swatch' + (index === 0 ? ' active' : '');
+                swatch.style.background = `linear-gradient(180deg, ${gradient.colors[0]}, ${gradient.colors[1]})`;
+                swatch.title = gradient.name;
+                swatch.addEventListener('click', () => selectGradient(index));
+                grid.appendChild(swatch);
+            });
+        }
+
+        function selectGradient(index) {
+            state.selectedGradient = index;
+            document.querySelectorAll('.gradient-swatch').forEach((swatch, i) => {
+                swatch.classList.toggle('active', i === index);
+            });
+            updatePreview();
+        }
+
+        // Show/Hide background options
+        function updateBgOptions() {
+            const bgType = document.querySelector('input[name="bgType"]:checked').value;
+            state.bgType = bgType;
+
+            document.getElementById('solidColorPicker').classList.toggle('hidden', bgType !== 'solid');
+            document.getElementById('gradientPicker').classList.toggle('hidden', bgType !== 'gradient');
+            document.getElementById('imageUpload').classList.toggle('hidden', bgType !== 'image');
+        }
+
+        // Color picker updates
+        document.getElementById('bgColor').addEventListener('input', (e) => {
+            state.bgColor = e.target.value;
+            document.getElementById('colorValue').textContent = e.target.value;
+            updatePreview();
+        });
+
+        document.getElementById('textColor').addEventListener('input', (e) => {
+            state.textColor = e.target.value;
+            document.getElementById('textColorValue').textContent = e.target.value;
+            updatePreview();
+        });
+
+        // Font size slider
+        document.getElementById('fontSize').addEventListener('input', (e) => {
+            state.fontSize = parseInt(e.target.value);
+            document.getElementById('fontSizeValue').textContent = state.fontSize + 'px';
+            updatePreview();
+        });
+
+        // Text inputs
+        document.getElementById('overlayText').addEventListener('input', (e) => {
+            state.text = e.target.value;
+            updatePreview();
+        });
+
+        document.getElementById('textPosition').addEventListener('change', (e) => {
+            state.textPosition = e.target.value;
+            updatePreview();
+        });
+
+        document.getElementById('textAnimation').addEventListener('change', (e) => {
+            state.textAnimation = e.target.value;
+            updatePreview();
+        });
+
+        document.getElementById('videoDuration').addEventListener('change', (e) => {
+            state.duration = parseInt(e.target.value);
+        });
+
+        // Image upload
+        document.getElementById('bgImageInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    state.bgImage = new Image();
+                    state.bgImage.src = event.target.result;
+                    state.bgImage.onload = () => {
+                        document.getElementById('imagePreview').src = event.target.result;
+                        document.getElementById('imagePreviewContainer').classList.remove('hidden');
+                        updatePreview();
+                    };
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.getElementById('removeImage').addEventListener('click', () => {
+            state.bgImage = null;
+            document.getElementById('imagePreviewContainer').classList.add('hidden');
+            document.getElementById('bgImageInput').value = '';
+            updatePreview();
+        });
+
+        // Audio upload
+        document.getElementById('audioInput').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                state.audioFile = file;
+                document.getElementById('audioFileName').textContent = file.name;
+                document.getElementById('audioPreviewContainer').classList.remove('hidden');
+            }
+        });
+
+        document.getElementById('removeAudio').addEventListener('click', () => {
+            state.audioFile = null;
+            document.getElementById('audioPreviewContainer').classList.add('hidden');
+            document.getElementById('audioInput').value = '';
+        });
+
+        // Background type change
+        document.querySelectorAll('input[name="bgType"]').forEach(radio => {
+            radio.addEventListener('change', updateBgOptions);
+        });
+
+        // Create gradient
+        function createGradient(width, height, gradientIndex) {
+            const gradient = ctx.createLinearGradient(0, 0, 0, height);
+            const colors = GRADIENTS[gradientIndex].colors;
+            gradient.addColorStop(0, colors[0]);
+            gradient.addColorStop(1, colors[1]);
+            return gradient;
+        }
+
+        // Hex to RGB
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+
+        // Wrap text
+        function wrapText(text, maxWidth) {
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = '';
+
+            ctx.font = `bold ${state.fontSize * 3}px Poppins, sans-serif`;
+
+            words.forEach(word => {
+                const testLine = currentLine + (currentLine ? ' ' : '') + word;
+                const metrics = ctx.measureText(testLine);
+                
+                if (metrics.width > maxWidth && currentLine) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = testLine;
+                }
+            });
+            
+            if (currentLine) {
+                lines.push(currentLine);
+            }
+            
+            return lines;
+        }
+
+        // Calculate text position
+        function getTextY(lines) {
+            const totalHeight = lines.length * (state.fontSize * 3 + 30);
+            
+            switch (state.textPosition) {
+                case 'top':
+                    return 150;
+                case 'center':
+                    return (canvas.height - totalHeight) / 2;
+                case 'bottom':
+                    return canvas.height - totalHeight - 150;
+                default:
+                    return canvas.height / 2;
+            }
+        }
+
+        // Draw background
+        function drawBackground() {
+            switch (state.bgType) {
+                case 'solid':
+                    ctx.fillStyle = state.bgColor;
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    break;
+                case 'gradient':
+                    ctx.fillStyle = createGradient(canvas.width, canvas.height, state.selectedGradient);
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    break;
+                case 'image':
+                    if (state.bgImage) {
+                        // Cover mode
+                        const imgRatio = state.bgImage.width / state.bgImage.height;
+                        const canvasRatio = canvas.width / canvas.height;
+                        
+                        let drawWidth, drawHeight, offsetX, offsetY;
+                        
+                        if (imgRatio > canvasRatio) {
+                            drawHeight = canvas.height;
+                            drawWidth = canvas.height * imgRatio;
+                            offsetX = (canvas.width - drawWidth) / 2;
+                            offsetY = 0;
+                        } else {
+                            drawWidth = canvas.width;
+                            drawHeight = canvas.width / imgRatio;
+                            offsetX = 0;
+                            offsetY = (canvas.height - drawHeight) / 2;
+                        }
+                        
+                        ctx.drawImage(state.bgImage, offsetX, offsetY, drawWidth, drawHeight);
+                    }
+                    break;
+            }
+        }
+
+        // Calculate animation
+        function getAnimationProgress() {
+            const frame = state.animationFrame;
+            const totalFrames = 30; // 1 second for animation
+
+            switch (state.textAnimation) {
+                case 'fade':
+                    return Math.min(1, frame / 15);
+                case 'slideUp':
+                    return Math.min(1, frame / 15);
+                case 'bounce':
+                    if (frame < 10) return frame / 10;
+                    if (frame < 20) return 1 - Math.abs(10 - frame) / 10;
+                    return 1;
+                case 'typewriter':
+                    return Math.min(1, frame / 20);
+                default:
+                    return 1;
+            }
+        }
+
+        // Draw text
+        function drawText() {
+            if (!state.text) return;
+
+            const lines = wrapText(state.text, canvas.width - 100);
+            const progress = getAnimationProgress();
+            const yBase = getTextY(lines);
+
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'top';
+
+            lines.forEach((line, index) => {
+                let y = yBase + index * (state.fontSize * 3 + 30);
+                let x = canvas.width / 2;
+                let alpha = progress;
+
+                // Apply animations
+                switch (state.textAnimation) {
+                    case 'fade':
+                        alpha = progress;
+                        break;
+                    case 'slideUp':
+                        const slideOffset = (1 - progress) * 200;
+                        y -= slideOffset;
+                        break;
+                    case 'bounce':
+                        if (progress < 1) {
+                            y -= (1 - progress) * 100;
+                        }
+                        break;
+                    case 'typewriter':
+                        // For typewriter, we show partial text
+                        if (progress < 1) {
+                            const charCount = Math.floor(line.length * progress);
+                            line = line.substring(0, charCount);
+                        }
+                        break;
+                }
+
+                // Draw text shadow for better visibility
+                ctx.font = `bold ${state.fontSize * 3}px Poppins, sans-serif`;
+                
+                // Shadow
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                ctx.fillText(line, x + 3, y + 3);
+
+                // Main text
+                const rgb = hexToRgb(state.textColor);
+                ctx.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+                ctx.fillText(line, x, y);
+            });
+        }
+
+        // Update preview
+        function updatePreview() {
+            drawBackground();
+            drawText();
+        }
+
+        // Animation loop for preview
+        let animationId;
+        function animatePreview() {
+            state.animationFrame++;
+            if (state.animationFrame > 30) {
+                state.animationFrame = 0;
+            }
+            updatePreview();
+            animationId = requestAnimationFrame(animatePreview);
+        }
+
+        // Stop animation
+        function stopPreviewAnimation() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+            }
+            state.animationFrame = 0;
+        }
+
+        // Show toast
+        function showToast(message, type = 'success') {
+            document.getElementById('toastIcon').textContent = type === 'success' ? '✅' : '❌';
+            document.getElementById('toastMessage').textContent = message;
+            toast.className = `toast ${type}`;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Generate video
+        async function generateVideo() {
+            const fps = 30;
+            const totalFrames = fps * state.duration;
+            const width = 1080;
+            const height = 1920;
+
+            // Stop preview animation
+            stopPreviewAnimation();
+
+            // Show progress
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '⏳ Generating...';
+            progressContainer.classList.add('active');
+            downloadSection.classList.remove('active');
+
+            // Create offscreen canvas
+            const offscreenCanvas = document.createElement('canvas');
+            offscreenCanvas.width = width;
+            offscreenCanvas.height = height;
+            const offCtx = offscreenCanvas.getContext('2d');
+
+            // Frames storage
+            const frames = [];
+
+            // Generate frames
+            for (let i = 0; i < totalFrames; i++) {
+                const progress = i / totalFrames;
+                progressFill.style.width = `${progress * 80}%`;
+                progressText.textContent = `Generating frames... ${Math.round(progress * 100)}%`;
+
+                // Draw background
+                switch (state.bgType) {
+                    case 'solid':
+                        offCtx.fillStyle = state.bgColor;
+                        offCtx.fillRect(0, 0, width, height);
+                        break;
+                    case 'gradient':
+                        const gradient = offCtx.createLinearGradient(0, 0, 0, height);
+                        const colors = GRADIENTS[state.selectedGradient].colors;
+                        gradient.addColorStop(0, colors[0]);
+                        gradient.addColorStop(1, colors[1]);
+                        offCtx.fillStyle = gradient;
+                        offCtx.fillRect(0, 0, width, height);
+                        break;
+                    case 'image':
+                        if (state.bgImage) {
+                            const imgRatio = state.bgImage.width / state.bgImage.height;
+                            let drawWidth, drawHeight, offsetX, offsetY;
+                            
+                            if (imgRatio > (width / height)) {
+                                drawHeight = height;
+                                drawWidth = height * imgRatio;
+                                offsetX = (width - drawWidth) / 2;
+                                offsetY = 0;
+                            } else {
+                                drawWidth = width;
+                                drawHeight = width / imgRatio;
+                                offsetX = 0;
+                                offsetY = (height - drawHeight) / 2;
+                            }
+                            
+                            offCtx.drawImage(state.bgImage, offsetX, offsetY, drawWidth, drawHeight);
+                        }
+                        break;
+                }
+
+                // Draw text with animation
+                if (state.text) {
+                    const animFrames = 30;
+                    let animProgress = 1;
+
+                    if (i < animFrames) {
+                        switch (state.textAnimation) {
+                            case 'fade':
+                                animProgress = i / 15;
+                                break;
+                            case 'slideUp':
+                                animProgress = i / 15;
+                                break;
+                            case 'bounce':
+                                if (i < 10) animProgress = i / 10;
+                                else if (i < 20) animProgress = 1 - Math.abs(10 - i) / 10;
+                                else animProgress = 1;
+                                break;
+                            case 'typewriter':
+                                animProgress = i / 20;
+                                break;
+                        }
+                    }
+
+                    const scaledFontSize = state.fontSize * 3;
+                    offCtx.font = `bold ${scaledFontSize}px Poppins, sans-serif`;
+                    offCtx.textAlign = 'center';
+                    offCtx.textBaseline = 'top';
+
+                    const words = state.text.split(' ');
+                    const lines = [];
+                    let currentLine = '';
+
+                    words.forEach(word => {
+                        const testLine = currentLine + (currentLine ? ' ' : '') + word;
+                        if (offCtx.measureText(testLine).width > width - 100) {
+                            if (currentLine) lines.push(currentLine);
+                            currentLine = word;
+                        } else {
+                            currentLine = testLine;
+                        }
+                    });
+                    if (currentLine) lines.push(currentLine);
+
+                    const lineHeight = scaledFontSize + 30;
+                    const totalHeight = lines.length * lineHeight;
+                    let yBase;
+
+                    switch (state.textPosition) {
+                        case 'top': yBase = 150; break;
+                        case 'center': yBase = (height - totalHeight) / 2; break;
+                        case 'bottom': yBase = height - totalHeight - 150; break;
+                    }
+
+                    lines.forEach((line, index) => {
+                        let y = yBase + index * lineHeight;
+                        let x = width / 2;
+
+                        if (state.textAnimation === 'slideUp' && i < animFrames) {
+                            y -= (1 - animProgress) * 200;
+                        }
+                        if (state.textAnimation === 'bounce' && i < 20) {
+                            y -= (1 - animProgress) * 100;
+                        }
+
+                        // Shadow
+                        offCtx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+                        offCtx.fillText(line, x + 3, y + 3);
+
+                        // Text
+                        const rgb = hexToRgb(state.textColor);
+                        offCtx.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${animProgress})`;
+                        offCtx.fillText(line, x, y);
+                    });
+                }
+
+                // Capture frame
+                frames.push(offscreenCanvas.toDataURL('image/png'));
+
+                // Allow UI to update
+                if (i % 10 === 0) {
+                    await new Promise(resolve => setTimeout(resolve, 0));
+                }
+            }
+
+            progressText.textContent = 'Creating video file...';
+            progressFill.style.width = '90%';
+
+            // Create video using MediaRecorder API
+            try {
+                // Use WebCodecs API if available, otherwise fallback
+                const stream = offscreenCanvas.captureStream(fps);
+                
+                // Add audio if available
+                let audioTrack = null;
+                if (state.audioFile) {
+                    const audioContext = new AudioContext();
+                    const audioBuffer = await audioFile.arrayBuffer();
+                    const audioDecoded = await audioContext.decodeAudioData(audioBuffer);
+                    
+                    // Create audio processing
+                    const source = audioContext.createBufferSource();
+                    source.buffer = audioDecoded;
+                    source.loop = true;
+                    
+                    const dest = audioContext.createMediaStreamDestination();
+                    source.connect(dest);
+                    source.start();
+                    
+                    audioTrack = dest.stream.getAudioTracks()[0];
+                }
+
+                if (audioTrack) {
+                    stream.addTrack(audioTrack);
+                }
+
+                // Use MediaRecorder
+                const mediaRecorder = new MediaRecorder(stream, {
+                    mimeType: 'video/webm;codecs=vp9',
+                    videoBitsPerSecond: 5000000
+                });
+
+                const chunks = [];
+                mediaRecorder.ondataavailable = (e) => {
+                    if (e.data.size > 0) {
+                        chunks.push(e.data);
+                    }
+                };
+
+                mediaRecorder.onstop = () => {
+                    const blob = new Blob(chunks, { type: 'video/webm' });
+                    state.generatedBlob = blob;
+                    
+                    progressFill.style.width = '100%';
+                    progressText.textContent = 'Video created successfully!';
+                    
+                    setTimeout(() => {
+                        progressContainer.classList.remove('active');
+                        downloadSection.classList.add('active');
+                        generateBtn.disabled = false;
+                        generateBtn.innerHTML = '🎬 Generate Video';
+                        showToast('Video generated successfully!');
+                    }, 500);
+                };
+
+                // Draw frames to create video
+                const videoCanvas = document.createElement('canvas');
+                videoCanvas.width = width;
+                videoCanvas.height = height;
+                const videoCtx = videoCanvas.getContext('2d');
+
+                // Create a temporary video element to record
+                const tempVideo = document.createElement('video');
+                tempVideo.src = frames[0];
+                tempVideo.muted = true;
+
+                await new Promise(resolve => tempVideo.onload = resolve);
+
+                mediaRecorder.start();
+
+                // Animate through frames
+                for (let i = 0; i < frames.length; i++) {
+                    await new Promise(resolve => {
+                        const img = new Image();
+                        img.onload = () => {
+                            videoCtx.drawImage(img, 0, 0, width, height);
+                            tempVideo.src = frames[i];
+                            tempVideo.play();
+                            
+                            setTimeout(() => {
+                                tempVideo.pause();
+                                resolve();
+                            }, 1000 / fps);
+                        };
+                        img.src = frames[i];
+                    });
+
+                    progressFill.style.width = `${80 + (i / frames.length) * 15}%`;
+                    progressText.textContent = `Encoding video... ${Math.round((i / frames.length) * 100)}%`;
+                }
+
+                mediaRecorder.stop();
+
+            } catch (error) {
+                console.error('Video generation error:', error);
+                showToast('Error generating video. Please try again.', 'error');
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = '🎬 Generate Video';
+                progressContainer.classList.remove('active');
+            }
+        }
+
+        // Download video
+        downloadBtn.addEventListener('click', () => {
+            if (state.generatedBlob) {
+                const url = URL.createObjectURL(state.generatedBlob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'youtube_shorts_video.webm';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                showToast('Video downloaded!');
+            }
+        });
+
+        // New video
+        newVideoBtn.addEventListener('click', () => {
+            state.generatedBlob = null;
+            downloadSection.classList.remove('active');
+            animatePreview();
+        });
+
+        // Generate button
+        generateBtn.addEventListener('click', generateVideo);
+
+        // Initialize
+        initGradientGrid();
+        updatePreview();
+        animatePreview();
+    </script>
+</body>
+</html>
