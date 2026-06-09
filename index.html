@@ -1671,39 +1671,45 @@
                 progressText.textContent = `Generating frames... ${Math.round(progress * 100)}%`;
 
                 // Draw background
-                switch (state.bgType) {
-                    case 'solid':
-                        offCtx.fillStyle = state.bgColor;
-                        offCtx.fillRect(0, 0, width, height);
-                        break;
-                    case 'gradient':
-                        const gradient = offCtx.createLinearGradient(0, 0, 0, height);
-                        const colors = GRADIENTS[state.selectedGradient].colors;
-                        gradient.addColorStop(0, colors[0]);
-                        gradient.addColorStop(1, colors[1]);
-                        offCtx.fillStyle = gradient;
-                        offCtx.fillRect(0, 0, width, height);
-                        break;
-                    case 'image':
-                        if (state.bgImage) {
-                            const imgRatio = state.bgImage.width / state.bgImage.height;
-                            let drawWidth, drawHeight, offsetX, offsetY;
-                            
-                            if (imgRatio > (width / height)) {
-                                drawHeight = height;
-                                drawWidth = height * imgRatio;
-                                offsetX = (width - drawWidth) / 2;
-                                offsetY = 0;
-                            } else {
-                                drawWidth = width;
-                                drawHeight = width / imgRatio;
-                                offsetX = 0;
-                                offsetY = (height - drawHeight) / 2;
-                            }
-                            
-                            offCtx.drawImage(state.bgImage, offsetX, offsetY, drawWidth, drawHeight);
-                        }
-                        break;
+                let bgImage = null;
+                if (state.aiMode && state.aiGeneratedImage) {
+                    bgImage = state.aiGeneratedImage;
+                } else if (state.bgType === 'image') {
+                    bgImage = state.bgImage;
+                }
+
+                if (bgImage) {
+                    const imgRatio = bgImage.width / bgImage.height;
+                    let drawWidth, drawHeight, offsetX, offsetY;
+                    
+                    if (imgRatio > (width / height)) {
+                        drawHeight = height;
+                        drawWidth = height * imgRatio;
+                        offsetX = (width - drawWidth) / 2;
+                        offsetY = 0;
+                    } else {
+                        drawWidth = width;
+                        drawHeight = width / imgRatio;
+                        offsetX = 0;
+                        offsetY = (height - drawHeight) / 2;
+                    }
+                    
+                    offCtx.drawImage(bgImage, offsetX, offsetY, drawWidth, drawHeight);
+                } else {
+                    switch (state.bgType) {
+                        case 'solid':
+                            offCtx.fillStyle = state.bgColor;
+                            offCtx.fillRect(0, 0, width, height);
+                            break;
+                        case 'gradient':
+                            const gradient = offCtx.createLinearGradient(0, 0, 0, height);
+                            const colors = GRADIENTS[state.selectedGradient].colors;
+                            gradient.addColorStop(0, colors[0]);
+                            gradient.addColorStop(1, colors[1]);
+                            offCtx.fillStyle = gradient;
+                            offCtx.fillRect(0, 0, width, height);
+                            break;
+                    }
                 }
 
                 // Draw text with animation
@@ -1803,7 +1809,7 @@
                 let audioTrack = null;
                 if (state.audioFile) {
                     const audioContext = new AudioContext();
-                    const audioBuffer = await audioFile.arrayBuffer();
+                    const audioBuffer = await state.audioFile.arrayBuffer();
                     const audioDecoded = await audioContext.decodeAudioData(audioBuffer);
                     
                     // Create audio processing
