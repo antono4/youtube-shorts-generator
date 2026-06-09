@@ -189,31 +189,37 @@
         .style-presets {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 6px;
+            gap: 8px;
             margin-top: 0.75rem;
         }
 
         .style-preset {
-            padding: 6px 8px;
+            padding: 10px 8px;
             background: var(--secondary);
             border: 2px solid transparent;
-            border-radius: 8px;
+            border-radius: 10px;
             color: var(--text-muted);
-            font-size: 0.7rem;
+            font-size: 0.75rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
             text-align: center;
+            white-space: nowrap;
         }
 
         .style-preset:hover {
             border-color: #00D4FF;
             color: var(--text);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
         }
 
         .style-preset.active {
-            background: rgba(0, 212, 255, 0.2);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.3), rgba(123, 47, 255, 0.3));
             border-color: #00D4FF;
             color: #00D4FF;
+            font-weight: 600;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
         }
 
         /* Generate AI Button */
@@ -915,34 +921,46 @@
 
         /* Prompt Suggestions */
         .prompt-suggestions {
-            margin-top: 0.5rem;
+            margin-top: 1rem;
         }
 
         .prompt-suggestions-label {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--text-muted);
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
         }
 
         .prompt-tags {
             display: flex;
             flex-wrap: wrap;
-            gap: 4px;
+            gap: 8px;
         }
 
         .prompt-tag {
-            padding: 4px 8px;
+            padding: 8px 12px;
             background: var(--secondary);
-            border: 1px solid rgba(0, 212, 255, 0.3);
-            border-radius: 6px;
-            font-size: 0.65rem;
-            color: #00D4FF;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: var(--text-muted);
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .prompt-tag:hover {
-            background: rgba(0, 212, 255, 0.2);
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(123, 47, 255, 0.2));
+            border-color: #00D4FF;
+            color: #00D4FF;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);
+        }
+
+        .prompt-tag:active {
+            transform: translateY(0);
         }
     </style>
 </head>
