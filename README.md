@@ -1,5 +1,8 @@
 # 🎬 YouTube Shorts Video Generator - AI Powered
 
+> **Created by Antono**
+
+
 A modern, client-side web application for creating vertical videos optimized for YouTube Shorts with **AI-powered image generation**. Built with pure HTML, CSS, and JavaScript - no server required!
 
 ![YouTube Shorts Generator](https://img.shields.io/badge/YouTube-Shorts-FF0050?style=for-the-badge&logo=youtube)
