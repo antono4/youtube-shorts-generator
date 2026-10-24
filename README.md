@@ -1,1 +1,31 @@
-Last updated: 2026-10-25 02:40:31 WIB
+# youtube-shorts-generator
+
+
+
+## 📋 Overview
+
+This repository contains **14 files** and is built with the following technologies:
+
+Python, HTML
+
+## 🚀 Quick Start
+
+```bash
+pip install -r requirements.txt
+python main.py
+```
+
+## ✨ Features
+
+- 📝 Auto-generated documentation
+
+## 🛠️ Technologies
+
+Python, HTML
+
+## 📄 License
+
+MIT License
+
+---
+*Last updated: 2026-10-25 04:16:45 WIB*
